@@ -1,0 +1,8 @@
+/vendor/
+/src/env.php
+/logs/*
+!/logs/README.md
+/templates/cache/*
+!/templates/cache/README.md
+.DS_STORE
+composer.lock
