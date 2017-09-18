@@ -52,15 +52,19 @@ class UserModel extends DB
     }
     
     // find users with <id_u> or <username> or <registration>
-    public function find(){
+    public function find($id=null){
         
-        if($this->username == '' && $this->id_u == '' && $this->registration == '')
-            return -1;
+        $options = '';
         
-        $options = "where id_u = '$this->id_u' or username = '$this->username' or matricula = '$this->registration'";
+        if($id != null)
+            $options = "where id_u = '$id' or username = '$id' or matricula = '$id'";
         
         $resul = DB::find($this::table, $cols='NAME, TYPE, TEAM, ID_U, EMAIL, USERNAME, CELULAR', $options);
         
         return $resul;
+    }
+    
+    public function verify_pass(){
+        
     }
 }
