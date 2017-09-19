@@ -31,7 +31,7 @@ class DB
         return $this->exec($sql);
     }
     
-    // create and execute sql query
+    // create and execute sql query find
     public function find( $table, $cols='*', $options='' ){
         // 
         $sql = 'select '. $cols . ' from '. $table . ' ' . $options;

@@ -1,8 +1,9 @@
 <?php
 
 require_once __DIR__.'/../db/db.php';
+require_once __DIR__.'/../models/ticket.model.php';
 
-class Ticket {
+class Ticket extends TicketModel{
     
     public $app;
     protected $db;
@@ -14,22 +15,13 @@ class Ticket {
     
     //registra um novo ticket
     public function newTicket(){
-        
         $data = $this->app->request->getBody();
-        
-        $data = json_decode($data, true);
-        
-        return $data;
+        echo $data;
     }
     
     public function getTickets(){
-        // $stid = $this->db->query('select * from CR_TICKETS');
-        // find(<table>, <options>, <cols>)
-        // options and cols optionals
-        $stid = $this->db->find( $table='cr_tickets' );
-        
-        echo $this->db->to_json($stid);
-        $this->app->response->setStatus(200);
+        $resul = TicketModel::find();
+        echo DB::to_json($resul);
     }
     
      

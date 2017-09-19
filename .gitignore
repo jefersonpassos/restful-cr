@@ -1,4 +1,5 @@
 /vendor/
+/src/db/*.sql
 /src/env.php
 /logs/*
 !/logs/README.md

@@ -12,27 +12,27 @@ class UserModel extends DB
     public $password;
     public $email;
     public $username;
-    public $phone;
+    public $celular;
     public $sub_team;
-    public $registration;
+    public $matricula;
     
     public function __construct() {
         $this->id_u = "";
         $this->username = "";
-        $ths->registration = "";
+        $ths->matricula = "";
     }
     
     // save user
     public function save(){
         
-        $this->id_generate(16);
-        $pass = hash_pass($this->password);
-        
-        $sql = "INSERT INTO '$this::table'( name, type, team, id_u, password, email, username, celular, sub_team, matricula"            ."VALUES('$this->name', '$this->type', '$this->team', '$this->id_u', '$this->password', '$this->email', '$this->username', '$this->phone', '$this->sub_team', '$this->registration')";
+        $this::id_generate(16);
+        $pass = $this::hash_pass($this->password);
+          
+        $sql = "INSERT INTO '".$this::table."' ( name, type, team, id_u, password, email, username, celular, sub_team, matricula"            ."VALUES('$this->name', '$this->type', '$this->team', '$this->id_u', '$pass', '$this->email', '$this->username', '$this->celular', '$this->sub_team', '$this->matricula')";
     }
     
     // generate id
-    private function id_generate($len){
+    public function id_generate($len){
     	$code = "";
     	$chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
     
@@ -48,10 +48,17 @@ class UserModel extends DB
     // encrypt password
     private function hash_pass($pass){
         $hash_method = "sha256";
-        return hash($hash_method, $password);
+        return hash($hash_method, $pass);
     }
     
-    // find users with <id_u> or <username> or <registration>
+    public function verify_pass($p_verify, $p_hash){
+        if($this->hash_pass($p_verify) == $p_hash)
+            return true;
+        else 
+            return false;
+    }
+    
+    // find users with <id_u> or <username> or <matricula>
     public function find($id=null){
         
         $options = '';
@@ -64,7 +71,25 @@ class UserModel extends DB
         return $resul;
     }
     
-    public function verify_pass(){
+    public function auth($id, $password){
+        
+        $options="where id_u = '$id' or username = '$id' or matricula = '$id'";
+        
+        $resul = DB::find($this::table, $cols='password', $options );
+        
+        echo DB::to_json($resul);
+        
+        if(oci_num_rows($resul) > 0){
+        
+            $user = DB::to_array($resul);
+            $pass_u = $user->data[0]->password;
+        
+            return $this->verify_pass($password, $pass_u);
+        }
+        else 
+            return false;
         
     }
+    
+    
 }

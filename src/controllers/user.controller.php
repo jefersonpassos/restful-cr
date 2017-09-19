@@ -24,14 +24,26 @@ class User extends UserModel
         echo DB::to_json($resul);
     }
     
-    public function verify_pass($id, $password){
+    public function registerUser($data){
         $user = new UserModel();
+        $user->name = $data['name'];
+        $user->type = $data['type'];
+        $user->team = $data['team'];
+        $user->email = $data['email'];
+        $user->username = $data['username'];
+        $user->celular = $data['celular'];
+        $user->sub_team = $data['sub_team'];
+        $user->matricula = $data['matricula'];
         
-        $user->registration = $id;
-        $user->username = $id;
-        $user->id_u = $id;
-        $user->password = $password;
+        $user->save();
+    }
+    
+    public function auth($id, $password){
         
+        if(UserModel::auth($id, $password))
+            echo UserModel::find($id);
+        else
+            $this->app->response->setStatus(401);
     }
     
 }
